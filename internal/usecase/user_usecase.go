@@ -5,76 +5,83 @@ import (
 	"latihan-solid/internal/repository"
 )
 
-type BookUsecaseInterface interface {
-	SaveBook
-	FindAllBook
-	FindBookById
-	DeleteBook
+type UserUsecaseInterface interface {
+	SaveUser
+	FindAllUser
+	FindUserById
+	DeleteUser
+	UpdateUser
 }
 
-type SaveBook interface {
-	Save(bookRequest domain.Book) (domain.Book, error)
+type UpdateUser interface {
+	Update(userID int, updateData *domain.User) (*domain.User, error)
 }
 
-type FindAllBook interface {
-	FindAll() ([]domain.Book, error)
+type SaveUser interface {
+	Save(userRequest domain.User) (domain.User, error)
 }
 
-type FindBookById interface {
-	FindBookById(bookId int) (domain.Book, error)
+type FindAllUser interface {
+	FindAll() ([]domain.User, error)
 }
 
-type DeleteBook interface {
-	DeleteBook(bookId int) (string, error)
+type FindUserById interface {
+	FindUserById(userId int) (domain.User, error)
 }
 
-type BookRepository struct {
-	repo repository.BookRepositoryInterface
+type DeleteUser interface {
+	DeleteUser(userId int) (string, error)
 }
 
-// DeleteBook implements BookUsecaseInterface.
-func (uc *BookRepository) DeleteBook(bookId int) (string, error) {
-	msg, err := uc.repo.DeleteBook(bookId)
+type UserUsecase struct {
+	repo repository.UserRepositoryInterface
+}
+
+// DeleteUser implements UserUsecaseInterface.
+func (uc *UserUsecase) DeleteUser(userId int) (string, error) {
+	msg, err := uc.repo.DeleteUser(userId)
 	if err != nil {
 		return "", err
 	}
 	return msg, nil
 }
 
-// FindAll implements BookUsecaseInterface.
-func (uc *BookRepository) FindAll() ([]domain.Book, error) {
-	books, err := uc.repo.FindAll()
+// FindAll implements UserUsecaseInterface.
+func (uc *UserUsecase) FindAll() ([]domain.User, error) {
+	users, err := uc.repo.FindAll()
 	if err != nil {
-		return books, err
+		return users, err
 	}
 
-	return books, nil
+	return users, nil
 }
 
-// FindBookById implements BookUsecaseInterface.
-func (uc *BookRepository) FindBookById(bookId int) (domain.Book, error) {
-	book, err := uc.repo.FindBookById(bookId)
+// FindUserById implements UserUsecaseInterface.
+func (uc *UserUsecase) FindUserById(userId int) (domain.User, error) {
+	user, err := uc.repo.FindUserById(userId)
 	if err != nil {
-		return book, err
+		return user, err
 	}
 
-	return book, nil
-
+	return user, nil
 }
 
-// Save implements BookUsecaseInterface.
-func (uc *BookRepository) Save(bookRequest domain.Book) (domain.Book, error) {
-	book, err := uc.repo.Save(&bookRequest)
+// Save implements UserUsecaseInterface.
+func (uc *UserUsecase) Save(userRequest domain.User) (domain.User, error) {
+	book, err := uc.repo.Save(&userRequest)
 	if err != nil {
 		return *book, err
 	}
 
 	return *book, nil
-
 }
 
-func NewBookUsecase(repo repository.BookRepositoryInterface) BookUsecaseInterface {
-	return &BookRepository{
-		repo: repo,
-	}
+// Update implements UserUsecaseInterface.
+func (uc *UserUsecase) Update(userID int, updateData *domain.User) (*domain.User, error) {
+	panic("unimplemented")
+}
+
+func NewUserRepository(repo repository.UserRepositoryInterface) UserUsecaseInterface {
+	return &UserUsecase{
+		repo: repo}
 }

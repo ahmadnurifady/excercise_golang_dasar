@@ -6,27 +6,74 @@ import (
 	"latihan-solid/internal/handler"
 	"latihan-solid/internal/repository"
 	"latihan-solid/internal/usecase"
-	"reflect"
 )
 
 func main() {
-	repo := repository.NewBookRepository()
-	uc := usecase.NewBookUsecase(repo)
-	h := handler.NewBookHandler(uc)
+	// repo := repository.NewBookRepository()
+	// uc := usecase.NewBookUsecase(repo)
+	// h := handler.NewBookHandler(uc)
 
-	bookReq := domain.Book{
-		ID:     1,
-		Title:  "Buku Ngoding Golang",
-		Author: "Bene",
-		Stock:  11,
+	repoUser := repository.NewUserRepository()
+	ucUser := usecase.NewUserRepository(repoUser)
+	hUser := handler.NewUserHandler(ucUser)
+
+	// bookReq := domain.Book{
+	// 	ID:     1,
+	// 	Title:  "Buku Ngoding Golang",
+	// 	Author: "Bene",
+	// 	Stock:  11,
+	// }
+
+	// book2 := domain.Book{
+	// 	ID:     2,
+	// 	Title:  "Buku Ngoding Golang",
+	// 	Author: "Alex",
+	// 	Stock:  12,
+	// }
+
+	orang1 := domain.User{
+		Id:   1,
+		Name: "orang1 dalam negeri",
 	}
 
-	book2 := domain.Book{
-		ID:     2,
-		Title:  "Buku Ngoding Golang",
-		Author: "Alex",
-		Stock:  12,
+	orang2 := domain.User{
+		Id:   2,
+		Name: "orang2 luar negeri",
 	}
+
+	_, err := hUser.Save(orang1)
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err2 := hUser.Save(orang2)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+
+	allUsers, _ := hUser.FindAll()
+	fmt.Println("All books in handler:")
+	for _, user := range allUsers {
+		fmt.Printf("%+v\n", user)
+	}
+
+	findUserById, _ := hUser.FindUserById(2)
+	fmt.Println(findUserById)
+
+	deleteUser, _ := hUser.DeleteUser(2)
+	fmt.Println(deleteUser)
+
+	allUsers1, _ := hUser.FindAll()
+	fmt.Println("All books in handler:")
+	for _, user := range allUsers1 {
+		fmt.Printf("%+v\n", user)
+	}
+
+	// updateBook := domain.Book{
+	// 	ID:     2,
+	// 	Title:  "Buku Ngoding Golang update",
+	// 	Author: "waluyo",
+	// 	Stock:  11,
+	// }
 
 	// e, _ := json.Marshal(book2)
 	// a, _ := json.Marshal(bookReq)
@@ -36,32 +83,43 @@ func main() {
 
 	// repo.Save(&bookReq)
 	// repo.FindAll()
-	_, err := h.Save(bookReq)
-	if err != nil {
-		fmt.Println(err)
-	}
-	_, err2 := h.Save(book2)
-	if err2 != nil {
-		fmt.Println(err2)
-	}
+	// _, err := h.Save(bookReq)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// _, err2 := h.Save(book2)
+	// if err2 != nil {
+	// 	fmt.Println(err2)
+	// }
 
-	allBooks, _ := repo.FindAll()
-	fmt.Println("All books in repository:")
-	for _, book := range allBooks {
-		fmt.Printf("%+v\n", book)
-	}
+	// allBooks, _ := repo.FindAll()
+	// fmt.Println("All books in repository:")
+	// for _, book := range allBooks {
+	// 	fmt.Printf("%+v\n", book)
+	// }
 
-	var reflectValue reflect.Value
+	// uptBook, errUpt := h.Update(2, &updateBook)
+	// if errUpt != nil {
+	// 	fmt.Println("SEHABIS DIUPDATE", uptBook)
+	// }
 
-	reflectValue = reflect.ValueOf(10)
+	// allBooksForUpdate, _ := repo.FindAll()
+	// fmt.Println("All books in repository:")
+	// for _, book := range allBooksForUpdate {
+	// 	fmt.Printf("%+v\n", book)
+	// }
 
-	fmt.Println(reflectValue.Type())
+	// var reflectValue reflect.Value
 
-	reflectValue = reflect.ValueOf("anjayyy")
+	// reflectValue = reflect.ValueOf(10)
 
-	fmt.Println(reflectValue.Len())
+	// fmt.Println(reflectValue.Type())
 
-	fmt.Println(reflectValue.Type())
+	// reflectValue = reflect.ValueOf("anjayyy")
+
+	// fmt.Println(reflectValue.Len())
+
+	// fmt.Println(reflectValue.Type())
 
 	// // findById, _ := repo.FindBookById(1)
 	// // fmt.Println(findById)

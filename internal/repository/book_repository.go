@@ -10,6 +10,11 @@ type BookRepositoryInterface interface {
 	FindAllBook
 	FindBookById
 	DeleteBook
+	UpdateBook
+}
+
+type UpdateBook interface {
+	Update(bookID int, updateData *domain.Book) (*domain.Book, error)
 }
 
 type SaveBook interface {
@@ -82,10 +87,18 @@ func (repo *BookRepository) Save(bookRequest *domain.Book) (*domain.Book, error)
 	return bookRequest, nil
 }
 
-// updateBook implements BookRepositoryInterface.
-// func (repo BookRepository) UpdateBook(bookRequest *domain.Book) (bookResponse domain.Book, err error) {
-// 	panic("unimplemented")
-// }
+// Update implements BookRepositoryInterface.
+func (repo *BookRepository) Update(bookID int, updateData *domain.Book) (*domain.Book, error) {
+	existingBook, exists := repo.db[bookID]
+
+	if !exists {
+		return nil, fmt.Errorf("book with ID %d not found", bookID)
+	}
+
+	repo.db[bookID] = existingBook
+	return &existingBook, nil
+
+}
 
 func NewBookRepository() BookRepositoryInterface {
 	return &BookRepository{

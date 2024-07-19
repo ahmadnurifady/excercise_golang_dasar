@@ -11,6 +11,11 @@ type BookHandlerInterface interface {
 	FindAllBook
 	FindBookById
 	DeleteBook
+	UpdateBook
+}
+
+type UpdateBook interface {
+	Update(bookID int, updateData *domain.Book) (*domain.Book, error)
 }
 
 type SaveBook interface {
@@ -72,6 +77,16 @@ func (h *BookHandler) Save(bookRequest domain.Book) (domain.Book, error) {
 	}
 
 	book, err := h.uc.Save(bookRequest)
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
+}
+
+// Update implements BookHandlerInterface.
+func (h *BookHandler) Update(bookID int, updateData *domain.Book) (*domain.Book, error) {
+	book, err := h.uc.Update(bookID, updateData)
 	if err != nil {
 		return book, err
 	}
