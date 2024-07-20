@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"latihan-solid/internal/domain"
 )
@@ -8,7 +9,7 @@ import (
 type UserRepositoryInterface interface {
 	SaveUser
 	FindAllUser
-	FindUserById
+	FindUserByName
 	DeleteUser
 	UpdateUser
 }
@@ -25,8 +26,8 @@ type FindAllUser interface {
 	FindAll() ([]domain.User, error)
 }
 
-type FindUserById interface {
-	FindUserById(userId int) (domain.User, error)
+type FindUserByName interface {
+	FindUserByName(userName string) (domain.User, error)
 }
 
 type DeleteUser interface {
@@ -40,7 +41,13 @@ type UserRepository struct {
 // Save implements UserRepositoryInterface.
 func (repo *UserRepository) Save(userRequest *domain.User) (*domain.User, error) {
 	if _, exists := repo.db[userRequest.Id]; exists {
-		return nil, fmt.Errorf("user already exists")
+		return nil, errors.New("user sudah terdaftar")
+	}
+
+	for _, nameisExist := range repo.db {
+		if userRequest.Name == nameisExist.Name {
+			return nil, errors.New("nama ini sudah dipakai, silahkan gunakan nama lain")
+		}
 	}
 
 	repo.db[userRequest.Id] = *userRequest
@@ -59,13 +66,13 @@ func (repo *UserRepository) FindAll() ([]domain.User, error) {
 }
 
 // FindUserById implements UserRepositoryInterface.
-func (repo *UserRepository) FindUserById(userId int) (domain.User, error) {
-	if _, exist := repo.db[userId]; !exist {
-		return domain.User{}, fmt.Errorf("User already exists")
-	}
+func (repo *UserRepository) FindUserByName(userName string) (domain.User, error) {
+	// if _, exist := repo.db[userId]; !exist {
+	// 	return domain.User{}, fmt.Errorf("user dengan id: %d tidak ditemukan", userId)
+	// }
 	var user domain.User
 	for _, val := range repo.db {
-		if val.Id == userId {
+		if val.Name == userName {
 			user = val
 		}
 	}
@@ -80,7 +87,7 @@ func (repo *UserRepository) Update(userID int, updateData *domain.User) (*domain
 // DeleteUser implements UserRepositoryInterface.
 func (repo *UserRepository) DeleteUser(userId int) (string, error) {
 	if _, exist := repo.db[userId]; !exist {
-		return "", fmt.Errorf("User already exists")
+		return "", fmt.Errorf("user dengan id: %d tidak ditemukan", userId)
 	}
 
 	delete(repo.db, userId)

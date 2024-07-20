@@ -8,7 +8,7 @@ import (
 type UserHandlerInterface interface {
 	SaveUser
 	FindAllUser
-	FindUserById
+	FindUserByName
 	DeleteUser
 	UpdateUser
 }
@@ -25,8 +25,8 @@ type FindAllUser interface {
 	FindAll() ([]domain.User, error)
 }
 
-type FindUserById interface {
-	FindUserById(userId int) (domain.User, error)
+type FindUserByName interface {
+	FindUserByName(userName string) (domain.User, error)
 }
 
 type DeleteUser interface {
@@ -41,7 +41,7 @@ type UserHandler struct {
 func (h *UserHandler) DeleteUser(userId int) (string, error) {
 	user, err := h.uc.DeleteUser(userId)
 	if err != nil {
-		return user, err
+		return "", err
 	}
 
 	return user, nil
@@ -51,17 +51,17 @@ func (h *UserHandler) DeleteUser(userId int) (string, error) {
 func (h *UserHandler) FindAll() ([]domain.User, error) {
 	users, err := h.uc.FindAll()
 	if err != nil {
-		return users, err
+		return []domain.User{}, err
 	}
 
 	return users, nil
 }
 
 // FindUserById implements UserHandlerInterface.
-func (h *UserHandler) FindUserById(userId int) (domain.User, error) {
-	user, err := h.uc.FindUserById(userId)
+func (h *UserHandler) FindUserByName(userName string) (domain.User, error) {
+	user, err := h.uc.FindUserByName(userName)
 	if err != nil {
-		return user, err
+		return domain.User{}, err
 	}
 
 	return user, nil
@@ -71,7 +71,7 @@ func (h *UserHandler) FindUserById(userId int) (domain.User, error) {
 func (h *UserHandler) Save(userRequest domain.User) (domain.User, error) {
 	user, err := h.uc.Save(userRequest)
 	if err != nil {
-		return user, err
+		return domain.User{}, err
 	}
 
 	return user, nil

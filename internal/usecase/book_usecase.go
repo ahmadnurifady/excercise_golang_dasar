@@ -50,7 +50,7 @@ func (uc *BookUsecase) DeleteBook(bookId int) (string, error) {
 func (uc *BookUsecase) FindAll() ([]domain.Book, error) {
 	books, err := uc.repo.FindAll()
 	if err != nil {
-		return books, err
+		return []domain.Book{}, err
 	}
 
 	return books, nil
@@ -60,7 +60,7 @@ func (uc *BookUsecase) FindAll() ([]domain.Book, error) {
 func (uc *BookUsecase) FindBookById(bookId int) (domain.Book, error) {
 	book, err := uc.repo.FindBookById(bookId)
 	if err != nil {
-		return book, err
+		return domain.Book{}, err
 	}
 
 	return book, nil
@@ -71,7 +71,7 @@ func (uc *BookUsecase) FindBookById(bookId int) (domain.Book, error) {
 func (uc *BookUsecase) Save(bookRequest domain.Book) (domain.Book, error) {
 	book, err := uc.repo.Save(&bookRequest)
 	if err != nil {
-		return *book, err
+		return domain.Book{}, err
 	}
 
 	return *book, nil
@@ -82,7 +82,7 @@ func (uc *BookUsecase) Save(bookRequest domain.Book) (domain.Book, error) {
 func (uc *BookUsecase) Update(bookID int, updateData *domain.Book) (*domain.Book, error) {
 	book, err := uc.repo.Update(bookID, updateData)
 	if err != nil {
-		return book, err
+		return &domain.Book{}, err
 	}
 
 	return book, nil

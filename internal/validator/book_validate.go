@@ -37,8 +37,5 @@ func ValidateBook(book *domain.Book) error {
 		return fmt.Errorf("author name too long: maximum 50 characters")
 	}
 
-	if book.Stock <= 10 {
-		return fmt.Errorf("stock book too short: minimum 10")
-	}
 	return nil
 }

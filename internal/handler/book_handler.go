@@ -42,7 +42,7 @@ type BookHandler struct {
 func (h *BookHandler) DeleteBook(bookId int) (string, error) {
 	book, err := h.uc.DeleteBook(bookId)
 	if err != nil {
-		return book, err
+		return "", err
 	}
 
 	return book, nil
@@ -52,7 +52,7 @@ func (h *BookHandler) DeleteBook(bookId int) (string, error) {
 func (h *BookHandler) FindAll() ([]domain.Book, error) {
 	books, err := h.uc.FindAll()
 	if err != nil {
-		return books, err
+		return []domain.Book{}, err
 	}
 
 	return books, nil
@@ -62,7 +62,7 @@ func (h *BookHandler) FindAll() ([]domain.Book, error) {
 func (h *BookHandler) FindBookById(bookId int) (domain.Book, error) {
 	book, err := h.uc.FindBookById(bookId)
 	if err != nil {
-		return book, err
+		return domain.Book{}, err
 	}
 
 	return book, nil
@@ -78,7 +78,7 @@ func (h *BookHandler) Save(bookRequest domain.Book) (domain.Book, error) {
 
 	book, err := h.uc.Save(bookRequest)
 	if err != nil {
-		return book, err
+		return domain.Book{}, err
 	}
 
 	return book, nil
@@ -88,7 +88,7 @@ func (h *BookHandler) Save(bookRequest domain.Book) (domain.Book, error) {
 func (h *BookHandler) Update(bookID int, updateData *domain.Book) (*domain.Book, error) {
 	book, err := h.uc.Update(bookID, updateData)
 	if err != nil {
-		return book, err
+		return &domain.Book{}, err
 	}
 
 	return book, nil

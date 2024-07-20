@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"latihan-solid/internal/domain"
 )
@@ -29,10 +30,6 @@ type FindBookById interface {
 	FindBookById(bookId int) (domain.Book, error)
 }
 
-// type UpdateBook interface {
-// 	UpdateBook(bookRequest *domain.Book) (bookResponse domain.Book, err error)
-// }
-
 type DeleteBook interface {
 	DeleteBook(bookId int) (string, error)
 }
@@ -44,7 +41,7 @@ type BookRepository struct {
 // DeleteBook implements BookRepositoryInterface.
 func (repo *BookRepository) DeleteBook(bookId int) (string, error) {
 	if _, exist := repo.db[bookId]; !exist {
-		return "", fmt.Errorf("book already exists")
+		return "", fmt.Errorf("buku dengan id: %d tidak ditemukan", bookId)
 	}
 
 	delete(repo.db, bookId)
@@ -66,7 +63,7 @@ func (repo *BookRepository) FindAll() ([]domain.Book, error) {
 // findBookById implements BookRepositoryInterface.
 func (repo *BookRepository) FindBookById(bookId int) (domain.Book, error) {
 	if _, exist := repo.db[bookId]; !exist {
-		return domain.Book{}, fmt.Errorf("book already exists")
+		return domain.Book{}, fmt.Errorf("buku dengan id: %d tidak ditemukan", bookId)
 	}
 	var book domain.Book
 	for _, val := range repo.db {
@@ -80,7 +77,7 @@ func (repo *BookRepository) FindBookById(bookId int) (domain.Book, error) {
 // save implements BookRepositoryInterface.
 func (repo *BookRepository) Save(bookRequest *domain.Book) (*domain.Book, error) {
 	if _, exists := repo.db[bookRequest.ID]; exists {
-		return nil, fmt.Errorf("book already exists")
+		return &domain.Book{}, errors.New("buku sudah terdaftar")
 	}
 
 	repo.db[bookRequest.ID] = *bookRequest
@@ -92,10 +89,10 @@ func (repo *BookRepository) Update(bookID int, updateData *domain.Book) (*domain
 	existingBook, exists := repo.db[bookID]
 
 	if !exists {
-		return nil, fmt.Errorf("book with ID %d not found", bookID)
+		return &domain.Book{}, fmt.Errorf("buku dengan id: %d tidak ditemukan", bookID)
 	}
 
-	repo.db[bookID] = existingBook
+	repo.db[bookID] = *updateData
 	return &existingBook, nil
 
 }

@@ -8,7 +8,7 @@ import (
 type UserUsecaseInterface interface {
 	SaveUser
 	FindAllUser
-	FindUserById
+	FindUserByName
 	DeleteUser
 	UpdateUser
 }
@@ -25,8 +25,8 @@ type FindAllUser interface {
 	FindAll() ([]domain.User, error)
 }
 
-type FindUserById interface {
-	FindUserById(userId int) (domain.User, error)
+type FindUserByName interface {
+	FindUserByName(userName string) (domain.User, error)
 }
 
 type DeleteUser interface {
@@ -50,17 +50,17 @@ func (uc *UserUsecase) DeleteUser(userId int) (string, error) {
 func (uc *UserUsecase) FindAll() ([]domain.User, error) {
 	users, err := uc.repo.FindAll()
 	if err != nil {
-		return users, err
+		return []domain.User{}, err
 	}
 
 	return users, nil
 }
 
 // FindUserById implements UserUsecaseInterface.
-func (uc *UserUsecase) FindUserById(userId int) (domain.User, error) {
-	user, err := uc.repo.FindUserById(userId)
+func (uc *UserUsecase) FindUserByName(userName string) (domain.User, error) {
+	user, err := uc.repo.FindUserByName(userName)
 	if err != nil {
-		return user, err
+		return domain.User{}, err
 	}
 
 	return user, nil
@@ -70,7 +70,7 @@ func (uc *UserUsecase) FindUserById(userId int) (domain.User, error) {
 func (uc *UserUsecase) Save(userRequest domain.User) (domain.User, error) {
 	book, err := uc.repo.Save(&userRequest)
 	if err != nil {
-		return *book, err
+		return domain.User{}, err
 	}
 
 	return *book, nil
@@ -81,7 +81,7 @@ func (uc *UserUsecase) Update(userID int, updateData *domain.User) (*domain.User
 	panic("unimplemented")
 }
 
-func NewUserRepository(repo repository.UserRepositoryInterface) UserUsecaseInterface {
+func NewUserUsecase(repo repository.UserRepositoryInterface) UserUsecaseInterface {
 	return &UserUsecase{
 		repo: repo}
 }

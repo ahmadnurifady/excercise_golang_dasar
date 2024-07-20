@@ -1,21 +1,44 @@
 package main
 
-import (
-	"fmt"
-	"latihan-solid/internal/domain"
-	"latihan-solid/internal/handler"
-	"latihan-solid/internal/repository"
-	"latihan-solid/internal/usecase"
-)
+import "latihan-solid/cmd/application"
 
 func main() {
+
+	application.App()
+
 	// repo := repository.NewBookRepository()
 	// uc := usecase.NewBookUsecase(repo)
 	// h := handler.NewBookHandler(uc)
 
-	repoUser := repository.NewUserRepository()
-	ucUser := usecase.NewUserRepository(repoUser)
-	hUser := handler.NewUserHandler(ucUser)
+	// repoUser := repository.NewUserRepository()
+	// ucUser := usecase.NewUserRepository(repoUser)
+	// hUser := handler.NewUserHandler(ucUser)
+
+	// repoLoan := repository.NewLoaningRepository()
+	// ucLoan := usecase.NewLoaningUsecase(repoLoan)
+	// hLoan := handler.NewLoaningHandler(ucLoan)
+
+	// loan1 := domain.Loaning{
+	// 	Id: "",
+	// 	Book: domain.Book{
+	// 		ID:     1,
+	// 		Title:  "1111",
+	// 		Author: "1111",
+	// 		Stock:  false,
+	// 	},
+	// 	User: domain.User{
+	// 		Id:   1,
+	// 		Name: "11111",
+	// 	},
+	// 	Available: false,
+	// 	CreatedAt: time.Now(),
+	// 	UpdatedAt: time.Now(),
+	// }
+
+	// result, err := hLoan.CreateLoan(loan1)
+	// if err == nil {
+	// 	fmt.Println(result)
+	// }
 
 	// bookReq := domain.Book{
 	// 	ID:     1,
@@ -31,42 +54,42 @@ func main() {
 	// 	Stock:  12,
 	// }
 
-	orang1 := domain.User{
-		Id:   1,
-		Name: "orang1 dalam negeri",
-	}
+	// orang1 := domain.User{
+	// 	Id:   1,
+	// 	Name: "orang1 dalam negeri",
+	// }
 
-	orang2 := domain.User{
-		Id:   2,
-		Name: "orang2 luar negeri",
-	}
+	// orang2 := domain.User{
+	// 	Id:   2,
+	// 	Name: "orang2 luar negeri",
+	// }
 
-	_, err := hUser.Save(orang1)
-	if err != nil {
-		fmt.Println(err)
-	}
-	_, err2 := hUser.Save(orang2)
-	if err2 != nil {
-		fmt.Println(err2)
-	}
+	// _, err := hUser.Save(orang1)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// _, err2 := hUser.Save(orang2)
+	// if err2 != nil {
+	// 	fmt.Println(err2)
+	// }
 
-	allUsers, _ := hUser.FindAll()
-	fmt.Println("All books in handler:")
-	for _, user := range allUsers {
-		fmt.Printf("%+v\n", user)
-	}
+	// allUsers, _ := hUser.FindAll()
+	// fmt.Println("All books in handler:")
+	// for _, user := range allUsers {
+	// 	fmt.Printf("%+v\n", user)
+	// }
 
-	findUserById, _ := hUser.FindUserById(2)
-	fmt.Println(findUserById)
+	// findUserById, _ := hUser.FindUserById(2)
+	// fmt.Println(findUserById)
 
-	deleteUser, _ := hUser.DeleteUser(2)
-	fmt.Println(deleteUser)
+	// deleteUser, _ := hUser.DeleteUser(2)
+	// fmt.Println(deleteUser)
 
-	allUsers1, _ := hUser.FindAll()
-	fmt.Println("All books in handler:")
-	for _, user := range allUsers1 {
-		fmt.Printf("%+v\n", user)
-	}
+	// allUsers1, _ := hUser.FindAll()
+	// fmt.Println("All books in handler:")
+	// for _, user := range allUsers1 {
+	// 	fmt.Printf("%+v\n", user)
+	// }
 
 	// updateBook := domain.Book{
 	// 	ID:     2,
